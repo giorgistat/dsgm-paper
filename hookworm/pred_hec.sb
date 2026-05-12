@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#SBATCH -p serial
+#SBATCH -J pred_S
+#SBATCH --mem=230G
+
+
+source /etc/profile
+
+
+module purge                         # Clear all modules
+module load gcc/10.2.0              # Load GCC (same as used for install)
+module load R/4.3.1                 # Load R
+
+cd $global_storage/dsgm
+
+Rscript pred_hec.R
