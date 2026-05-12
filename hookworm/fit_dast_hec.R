@@ -78,8 +78,8 @@ cat("DAST prevalence Beta(16,4): mean =", 16/20,
     "var =", round(var_beta(16, 4), 4), "\n")
 
 pen_prev <- make_penalty(
-  alpha_a    = 16,
-  alpha_b    = 4,
+  alpha_a    = 16*3,
+  alpha_b    = 4*3,
   gamma_type = "lognormal",
   gamma_mean = log(7),
   gamma_sd   = 0.2
