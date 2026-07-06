@@ -92,3 +92,50 @@ saveRDS(pred_S_dast, "pred_S_dast.rds")
 pred_S_dsgm <- pred_over_grid(fit_dsgm, grid_pred = grid_pred)
 saveRDS(pred_S_dsgm, "pred_S_dsgm.rds")
 
+# =============================================================================
+# 4. BUILD INTERVENTION MATRIX ON THE PREDICTION GRID
+# =============================================================================
+# grid_pred must contain coordinates in the same CRS/units as sth (UTM, scaled
+# to km if scale_to_km = TRUE was used in fitting). Adjust the coordinate
+# extraction below if grid_pred stores x/y differently (e.g. as an sf object
+# vs a plain data.frame with x, y columns).
+
+if (inherits(grid_pred, "sf")) {
+  grid_coords_df <- st_drop_geometry(grid_pred)
+  grid_sf        <- grid_pred
+} else {
+  grid_coords_df <- grid_pred
+  grid_sf <- st_as_sf(grid_pred, coords = c("x", "y"), crs = data_utm)
+}
+
+grid_join    <- st_join(grid_sf, mda_data_sf, join = st_intersects, left = TRUE)
+grid_join_df <- st_drop_geometry(grid_join)
+
+grid_cov_matrix   <- as.matrix(grid_join_df[, cov_columns, drop = FALSE])
+intervention_grid <- ifelse(grid_cov_matrix > 0, 1L, 0L)
+intervention_grid[is.na(intervention_grid)] <- 0L
+
+# =============================================================================
+# 5. PREDICT TARGETS ON THE GRID FOR BOTH MODELS
+# =============================================================================
+# time_pred sets the survey time at which MDA impact (via alpha_W/gamma_W or
+# alpha/gamma) is evaluated on the grid. Using the most recent survey year
+# here so predictions reflect cumulative MDA impact up to the latest data.
+time_pred <- max(sth$year)
+
+pred_prev_dast <- pred_target_grid(
+  pred_S_dast,
+  f_target = list(prevalence = function(x) 1/(1+exp(-x))),
+  mda_grid  = intervention_grid,
+  time_pred = time_pred
+)
+
+pred_prev_dsgm <- pred_target_grid(
+  pred_S_dsgm,
+  mda_grid  = intervention_grid,
+  time_pred = time_pred
+)
+
+saveRDS(pred_prev_dast, "pred_prev_dast.rds")
+saveRDS(pred_prev_dsgm, "pred_prev_dsgm.rds")
+
