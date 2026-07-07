@@ -86,7 +86,7 @@ sth$key              <- NULL
 
 grid_pred <- readRDS("ken_grid_pred.rds")
 
-pred_S_dast <- pred_over_grid(fit_dast)
+pred_S_dast <- pred_over_grid(fit_dast, grid_pred = grid_pred, type = "joint")
 saveRDS(pred_S_dast, "pred_S_dast.rds")
 
 pred_S_dsgm <- pred_over_grid(fit_dsgm, grid_pred = grid_pred)
@@ -121,7 +121,7 @@ intervention_grid[is.na(intervention_grid)] <- 0L
 # time_pred sets the survey time at which MDA impact (via alpha_W/gamma_W or
 # alpha/gamma) is evaluated on the grid. Using the most recent survey year
 # here so predictions reflect cumulative MDA impact up to the latest data.
-time_pred <- max(sth$year)
+time_pred <- 2013
 
 pred_prev_dast <- pred_target_grid(
   pred_S_dast,

@@ -54,7 +54,7 @@ results_df <- do.call(rbind, Filter(Negate(is.null), results))
 pdf("agg_vs_mean.pdf", width = 8, height = 8)
 plot(log(results_df$mean + 1), log(results_df$omega),
      xlab = "mean eggs per gram (log scale)",
-     ylab = expression("Aggregation parameter" ~omega~" (log scale)"),
+     ylab = expression("Aggregation parameter (log scale)"),
      pch  = 20,
      cex  = sqrt(results_df$n) / max(sqrt(results_df$n)) * 2)
 abline(lm(log(omega) ~ log(mean + 1), data = results_df), col = "red")
