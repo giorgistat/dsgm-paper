@@ -2,7 +2,7 @@ rm(list = ls())
 
 library(RiskMap)
 library(sf)
-fit_dsgm <- readRDS("fit_sth_vary_k_10.rds")
+fit_dsgm <- readRDS("fit_sth_dsgm.rds")
 fit_dast <- readRDS("fit_sth_prev_dast.rds")
 
 # =============================================================================
@@ -10,7 +10,6 @@ fit_dast <- readRDS("fit_sth_prev_dast.rds")
 # =============================================================================
 sth <- read.csv("sth_ken_pi_sw.csv")
 sth <- sth[complete.cases(sth[, c("longitude", "latitude", "hkepg")]), ]
-fit <- readRDS("fit_sth.rds")
 
 sth <- st_as_sf(sth, coords = c("longitude", "latitude"), crs = 4326)
 data_utm <- propose_utm(sth)
