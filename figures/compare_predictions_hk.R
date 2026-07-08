@@ -119,5 +119,5 @@ fig <- (p1 | p2) + plot_layout(guides = "collect", heights = c(1, 1)) &
 
 fig
 
-ggsave("dsgm_dast_comparison.png", fig, width = 9, height = 9, dpi = 300)
-ggsave("dsgm_dast_comparison.pdf", fig, width = 9, height = 9, device = cairo_pdf)
+ggsave("dsgm_dast_comparison.png", fig, width = 9, height = 5, dpi = 300)
+ggsave("dsgm_dast_comparison.pdf", fig, width = 9, height = 5, device = cairo_pdf)
