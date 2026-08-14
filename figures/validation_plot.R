@@ -4,8 +4,8 @@ anpit <- readRDS("anpit_hk_mult.rds")
 
 p_anpit <- plot_AnPIT(anpit, mode = "average", which = "conditional")
 p_anpit <- p_anpit + ggplot2::ggtitle("") +
-                     ggplot2::ylab("AnPIT(u)") +
-                     ggplot2::xlab("u")
+  ggplot2::ylab("AnPIT(u)") +
+  ggplot2::xlab("u")
 
 pdf("hk_anpit.pdf")
 p_anpit
@@ -203,6 +203,10 @@ res <- plot_zero_calibration(anpit, by_location = TRUE,
                              title3 = "")
 
 p_zero <- res$p_location   # the location-scatter plot object
+p_zero <- p_zero + ggplot2::theme(
+  axis.title = ggplot2::element_text(size = 16),
+  axis.text  = ggplot2::element_text(size = 13)
+)
 
 pdf("hk_zero_plot.pdf")
 print(p_zero)
